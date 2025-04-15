@@ -1,89 +1,107 @@
-# Data Science Project Boilerplate
+# Predicción de Vacunación contra H1N1 y Gripe Estacional
 
-This boilerplate is designed to kickstart data science projects by providing a basic setup for database connections, data processing, and machine learning model development. It includes a structured folder organization for your datasets and a set of pre-defined Python packages necessary for most data science tasks.
+Este proyecto aborda el desafío de predecir la probabilidad de que individuos reciban vacunas contra el virus H1N1 y la gripe estacional, basándose en información sobre sus antecedentes, opiniones y comportamientos de salud. Se desarrollaron modelos de aprendizaje automático utilizando datos de la Encuesta Nacional de Gripe H1N1 de 2009 (NHFS) realizada en Estados Unidos.
 
-## Structure
+---
 
-The project is organized as follows:
+## Contexto
 
-- `app.py` - The main Python script that you run for your project.
-- `explore.py` - A notebook to explore data, play around, visualize, clean, etc. Ideally the notebook code should be migrated to the app.py when moving to production.
-- `utils.py` - This file contains utility code for operations like database connections.
-- `requirements.txt` - This file contains the list of necessary python packages.
-- `models/` - This directory should contain your SQLAlchemy model classes.
-- `data/` - This directory contains the following subdirectories:
-  - `interin/` - For intermediate data that has been transformed.
-  - `processed/` - For the final data to be used for modeling.
-  - `raw/` - For raw data without any processing.
- 
-    
-## Setup
+La pandemia de H1N1 de 2009, comúnmente conocida como "gripe porcina", afectó a millones de personas en todo el mundo y fue responsable de entre 151,000 y 575,000 muertes durante el primer año. Una vacuna para el virus H1N1 se hizo disponible públicamente en octubre de 2009.
 
-**Prerequisites**
+La Encuesta Nacional de Gripe H1N1 de 2009 fue diseñada para monitorear la cobertura de vacunación durante la temporada de gripe 2009-2010 en respuesta a esta pandemia. La población objetivo de la encuesta incluyó a todas las personas de 6 meses o más que vivían en Estados Unidos al momento de la entrevista.
 
-Make sure you have Python 3.11+ installed on your. You will also need pip for installing the Python packages.
+---
 
-**Installation**
+## Objetivos
 
-Clone the project repository to your local machine.
+- Desarrollar modelos predictivos para determinar la probabilidad de que una persona reciba la vacuna contra H1N1 y la gripe estacional  
+- Identificar los factores más influyentes en la decisión de vacunación  
+- Proporcionar información que pueda guiar futuros esfuerzos de salud pública  
 
-Navigate to the project directory and install the required Python packages:
+---
+
+## Datos
+
+Los datos provienen de la Encuesta Nacional de Gripe H1N1 de 2009 (NHFS) realizada entre octubre de 2009 y junio de 2010. Cada fila en el conjunto de datos representa una persona que respondió a la encuesta.
+
+**Variables objetivo:**
+
+- `h1n1_vaccine`: Si el encuestado recibió la vacuna contra la gripe H1N1 (0 = No; 1 = Sí)  
+- `seasonal_vaccine`: Si el encuestado recibió la vacuna contra la gripe estacional (0 = No; 1 = Sí)  
+
+**Características principales:**
+
+- Datos demográficos: edad, educación, raza, sexo, ingresos, estado civil  
+- Opiniones sobre eficacia de vacunas y riesgos de enfermedad  
+- Comportamientos preventivos de salud  
+- Recomendaciones médicas  
+- Condiciones médicas crónicas  
+- Situación de empleo y vivienda  
+
+---
+
+## Metodología
+
+### Exploración y Análisis de Datos:
+- Análisis de la distribución de las variables objetivo  
+- Identificación de valores faltantes  
+- Exploración de relaciones entre variables  
+
+### Preprocesamiento de Datos:
+- Manejo de valores faltantes mediante imputación  
+- Codificación de variables categóricas  
+- Escalado de características numéricas  
+
+### Modelado y Optimización:
+- Implementación de diversos algoritmos (XGBoost, Random Forest, Regresión Logística)  
+- Búsqueda sistemática de hiperparámetros mediante validación cruzada  
+- Evaluación de modelos utilizando área bajo la curva ROC (AUC-ROC)  
+
+### Análisis de Características Importantes:
+- Identificación de las variables más influyentes en las decisiones de vacunación  
+- Visualización de la importancia de características  
+
+---
+
+## Resultados
+
+### Predicción de vacunación H1N1:
+- **AUC-ROC:** 0.8404 ± 0.0059  
+- **Características más importantes:** recomendación del médico, nivel de preocupación por H1N1, opinión sobre eficacia de la vacuna  
+
+### Predicción de vacunación contra gripe estacional:
+- **AUC-ROC:** 0.8612 ± 0.0033  
+- **Características más importantes:** opinión sobre eficacia de la vacuna, recomendación del médico, percepción de riesgo  
+
+---
+
+## Hallazgos Clave
+
+- Las recomendaciones médicas son uno de los factores más influyentes en la decisión de vacunación para ambos tipos de vacunas  
+- La percepción de eficacia de la vacuna está estrechamente relacionada con la probabilidad de vacunación  
+- Diferentes grupos demográficos muestran patrones distintos de vacunación  
+- La preocupación por los efectos secundarios de las vacunas impacta negativamente en las tasas de vacunación  
+
+---
+
+## Cómo Utilizar Este Repositorio
+
+### Requisitos
+
+- Python 3.8+  
+- pandas  
+- numpy  
+- scikit-learn  
+- xgboost  
+- matplotlib  
+- seaborn  
+
+### Instalación
+
+Clona este repositorio:
 
 ```bash
-pip install -r requirements.txt
-```
+git clone https://github.com/tu_usuario/prediccion-vacunacion.git
+cd prediccion-vacunacion
 
-**Create a database (if needed)**
 
-Create a new database within the Postgres engine by customizing and executing the following command: `$ createdb -h localhost -U <username> <db_name>`
-Connect to the Postgres engine to use your database, manipulate tables and data: `$ psql -h localhost -U <username> <db_name>`
-NOTE: Remember to check the ./.env file information to get the username and db_name.
-
-Once you are inside PSQL you will be able to create tables, make queries, insert, update or delete data and much more!
-
-**Environment Variables**
-
-Create a .env file in the project root directory to store your environment variables, such as your database connection string:
-
-```makefile
-DATABASE_URL="your_database_connection_url_here"
-```
-
-## Running the Application
-
-To run the application, execute the app.py script from the root of the project directory:
-
-```bash
-python app.py
-```
-
-## Adding Models
-
-To add SQLAlchemy model classes, create new Python script files inside the models/ directory. These classes should be defined according to your database schema.
-
-Example model definition (`models/example_model.py`):
-
-```py
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String
-
-Base = declarative_base()
-
-class ExampleModel(Base):
-    __tablename__ = 'example_table'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-
-```
-
-## Working with Data
-
-You can place your raw datasets in the data/raw directory, intermediate datasets in data/interim, and the processed datasets ready for analysis in data/processed.
-
-To process data, you can modify the app.py script to include your data processing steps, utilizing pandas for data manipulation and analysis.
-
-## Contributors
-
-This template was built as part of the 4Geeks Academy [Data Science and Machine Learning Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about [4Geeks Academy's BootCamp programs](https://4geeksacademy.com/us/programs) here.
-
-Other templates and resources like this can be found on the school GitHub page.
